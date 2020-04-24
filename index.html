@@ -33,14 +33,17 @@
             }
             
             .content {
-                height: calc(100 - 50px);
+                height: calc(100% - 50px);
                 width: 100%;
+                display: block;
             }
             
             #option-list {
                 list-style-type: none;
                 columns: 2;
                 padding: 4%;
+                margin: 0;
+                height: 100%;
             }
             
             .nav-btn {
@@ -50,11 +53,24 @@
                 padding-bottom: 20px;
                 box-sizing: border-box;
                 width: 100%;
-                height: calc(calc(100% - 50px) / 2);
                 color: #FFF;
                 border-radius: 5px;
                 margin-top: 8%;
                 display: inline-block;
+                height: 100%;
+                box-shadow: 0 0 7px #0009;
+                transition-duration: 0.2s;
+            }
+            
+            .nav-btn:hover {
+                transform: scale(1.02);
+                transition-duration: 0.2s;
+            }
+            
+            .option-li {
+                height: 100%;
+                padding: 0;
+                margin: 0;
             }
             
             .nav-btn-text {
@@ -72,8 +88,8 @@
         </div>
         <div id="content">
             <ul id="option-list">
-                <li>
-                    <a href="restrictions.html">
+                <li class="option-li">
+                    <a href="restrs.html">
                         <div id="option-1" class="nav-btn">
                             <i class="material-icons nav-btn-icon">warning</i>
                             <div class="nav-btn-text">
@@ -82,29 +98,35 @@
                         </div>
                     </a>
                 </li>
-                <li>
-                    <div id="option-2" class="nav-btn">
-                        <i class="material-icons nav-btn-icon">question_answer</i>
-                        <div class="nav-btn-text">
-                            <h1>FAQ</h1>
+                <li class="option-li">
+                    <a href="instrs.html">
+                        <div id="option-2" class="nav-btn">
+                            <i class="material-icons nav-btn-icon">question_answer</i>
+                            <div class="nav-btn-text">
+                                <h1>Instructions</h1>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </li>
-                <li>
-                    <div id="option-3" class="nav-btn">
-                        <i class="material-icons nav-btn-icon">show_chart</i>
-                        <div class="nav-btn-text">
-                            <h1>Statistics</h1>
+                <li class="option-li">
+                    <a href="stats.html">
+                        <div id="option-3" class="nav-btn">
+                            <i class="material-icons nav-btn-icon">show_chart</i>
+                            <div class="nav-btn-text">
+                                <h1>Statistics</h1>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </li>
-                <li>
-                    <div id="option-4" class="nav-btn">
-                        <i class="material-icons nav-btn-icon">info_outline</i>
-                        <div class="nav-btn-text">
-                            <h1>Disinformation<br>&amp; warnings</h1>
+                <li class="option-li">
+                    <a href="disinfo.html">
+                        <div id="option-4" class="nav-btn">
+                            <i class="material-icons nav-btn-icon">info_outline</i>
+                            <div class="nav-btn-text">
+                                <h1>Disinformation</h1>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </li>
             </ul>
         </div>
