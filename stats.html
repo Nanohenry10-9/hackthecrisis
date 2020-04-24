@@ -2,6 +2,7 @@
 <html>
     <head>
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="utf-8">
@@ -33,16 +34,23 @@
                 display: inline;
             }
             
-            .content {
-                height: calc(100% - 50px);
+            #content {
                 width: 100%;
-                display: block;
+                height: 80%;
+                padding: 20px;
+                padding-top: 0;
+                box-sizing: border-box;
+            }
+            
+            #load-text {
+                width: 100%;
+                text-align: center;
             }
         </style>
     </head>
     
     <!--
-        https://download.data.public.lu/resources/donnees-covid19/20200423-171310/datapublic-covid19.xlsx
+        https://download.data.public.lu/resources/donnees-covid19/20200423-171310/datapublic-covid19.xlsx (?)
     -->
     
     <body>
@@ -50,24 +58,61 @@
             <h1 class="navbar-text">[App name]</h1>
         </div>
         <div id="content">
-            <h1>Statistics</h1>
-            <p id="data"></p>
+            <h1 id="load-text">Loading...</h1>
+            <canvas id="data"></canvas>
         </div>
         <script>
             const corsProxy = "https://cors-anywhere.herokuapp.com/";
             const url = corsProxy + "https://data.public.lu/fr/datasets/r/bad0c25e-2397-4739-9916-1f9d60625f03";
             var req = new XMLHttpRequest();
             req.open("GET", url, true);
+            req.setRequestHeader("X-Requested-With", "*");
             req.responseType = "arraybuffer";
             req.onload = function() {
                 var data = new Uint8Array(req.response);
                 var wb = XLSX.read(data, {type: "array"});
-                var js = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-                for (var i = 0; i < js.length; i++) {
-                    js[i]["Date"] = new Date(1899, 11, 30) + parseInt(js[i]["Date"]) * 1000 * 60 * 60 * 24;
-                    console.log(js[i]["Date"]);
-                    document.getElementById("data").innerHTML += JSON.stringify(js[i]) + "<br><br>";
+                var dt = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                
+                var labels = [];
+                for (var i = 0; i < dt.length; i++) {
+                    for (var k in dt[i]) {
+                        if (k != "Date" && k != "Nombre cumulé de personnes testées pour COVID" && !labels.includes(k)) {
+                            labels.push(k);
+                        }
+                    }
                 }
+                
+                var datas = {};
+                for (var i = 0; i < labels.length; i++) {
+                    datas[labels[i]] = [];
+                }
+                
+                var axisLabels = [];
+                for (var i = 0; i < dt.length; i++) {
+                    dt[i]["Date"] = new Date(new Date(1899, 11, 30).getTime() + parseFloat(dt[i]["Date"]) * 1000 * 60 * 60 * 24);
+                    axisLabels.push(dt[i]["Date"].toLocaleDateString("fr-LU").substring(0, 5));
+                    for (var j = 0; j < labels.length; j++) {
+                        datas[labels[j]].push(dt[i][labels[j]]);
+                    }
+                }
+                
+                var datasFormatted = [];
+                for (var i = 0; i < labels.length; i++) {
+                    datasFormatted.push({"label": labels[i], "data": datas[labels[i]], "borderColor": "rgb(" + Math.random() * 256 + "," + Math.random() * 256 + "," + Math.random() * 256 + ")"});
+                }
+                
+                console.log(datasFormatted);
+                
+                var ctx = document.getElementById("data").getContext("2d");
+                var chart = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: axisLabels,
+                        datasets: datasFormatted
+                    }
+                });
+                
+                document.getElementById("load-text").style.display = "none";
             };
             req.send();
         </script>
