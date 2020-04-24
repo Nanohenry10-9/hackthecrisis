@@ -54,7 +54,8 @@
             <p id="data"></p>
         </div>
         <script>
-            const url = "https://data.public.lu/fr/datasets/r/bad0c25e-2397-4739-9916-1f9d60625f03";
+            const corsProxy = "https://cors-anywhere.herokuapp.com/";
+            const url = corsProxy + "https://data.public.lu/fr/datasets/r/bad0c25e-2397-4739-9916-1f9d60625f03";
             var req = new XMLHttpRequest();
             req.open("GET", url, true);
             req.responseType = "arraybuffer";
