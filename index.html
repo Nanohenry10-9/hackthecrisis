@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="utf-8">
-        <title>[App name]</title>
+        <title>LetzInform</title>
         <style>
             * {
                 font-family: Verdana;
@@ -79,11 +79,15 @@
                 margin-bottom: 50px;
                 box-sizing: border-box;
             }
+            
+            .span-2 {
+                width: 98%;
+            }
         </style>
     </head>
     <body>
         <div id="navbar">
-            <h1 class="navbar-text">[App name]</h1>
+            <h1 class="navbar-text">LetzInform</h1>
         </div>
         <div id="content">
             <a href="restrs.html" class="nav-btn-wrapper">
@@ -120,7 +124,7 @@
                     </div>
                 </div>
             </a>
-            <a href="info.html" class="nav-btn-wrapper span-2">
+            <a href="news.html" class="nav-btn-wrapper span-2">
                 <div id="option-5" class="nav-btn">
                     <i class="material-icons nav-btn-icon">error</i>
                     <div class="nav-btn-text">
@@ -176,8 +180,8 @@
                     header.style.width = "100%";
                     rs.appendChild(header);
                     var content = [["Tested positive", "Nombre de personnes testées COVID+ par jour"],
-                                   ["ICU", "Nombre de personnes en soin intensifs (patients du grand est inclus)"],
                                    ["Hospitalized", "Total patients COVID ayant quitté l'hôpital"],
+                                   ["ICU", "Nombre de personnes en soin intensifs (patients du grand est inclus)"],
                                    ["Deceased", "Nombre de décès - cumulé (sans patients du grand est)"]];
                     var colors = ["red", "yellow", "green"];
                     for (var i = 0; i < content.length; i++) {
