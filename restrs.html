@@ -3,6 +3,8 @@
     <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
         <meta charset="utf-8">
         <title>LetzInform</title>
         <style>
@@ -66,56 +68,50 @@
             <a href="index.html" class="nav-btn-wrapper">
                 <div id="index" class="nav-btn">
             <h1 class="navbar-text">LetzInform</h1>
+            </div>
+        </a>
         </div>
         <div id="content">
-                15.04.2020
-            <div id="disclaimer">
-                <p>It is important to note that any resumption of activities will be accompanied by very strict barrier gestures and complemented by the <b>mandatory wearing of a mask </b> or any other device that covers the nose and mouth for interpersonal contact situations if the safety distance of <b>2 metres cannot be guaranteed.</b>
-
-</p>
-            </div>
-           <div id="strategy">
-                
-                <h1>Deconfinement strategy in phases</h1>
-                <h2><b>Phase 1</b> - Reopening of construction sites (tentative date <u>20 April 2020</u>)</h2>
-                <p>The first phase thus covers the following activities:
-
-</p>
-                <ul>
-                    <li>Reopening of construction sites; 
-</li>
-                    <li>Educational aid and assistance activities (Services in child and family aid, Competence centres in special psycho-pedagogical care and measures to benefit children who are on the verge of dropping out of school);
-</li>
-                    <li>Activities of gardeners and landscapers; 
-</li>
-                    <li>Businesses whose main activity is do-it-yourself;
-</li>
-                    <li>Reopening of recycling centres.
-</li>
-                </ul>
-                <p>This list will be completed on 4 May by the resumption of senior classes, as well as internships and practical work at BTS and university level.
-
-</p>
-                <h2><b>Phase 2</b> - resumption of secondary education (tentative date <u>11 May 2020</u>)</h2>
-                <h2><b>Phase 3</b> - resumption of fundamental education as well as the reopening of crèches and childcare facilities (tentative date <u>25 May 2020</u>)</h2>
-                <p>This will be followed - in later phases - by the resumption of commercial activities and the reopening of the HORECA sector. At this stage, however, it is premature to give a detailed assessment of the lifting of restrictions in this sector. A final decision will be taken in due course by the Government Council on the basis of an analysis of the situation.
-
-</p>
-                <p>Companies, businesses and administrations are generally encouraged to continue to promote teleworking throughout the transition period out of confinement. 
-
-</p>
-                <p>Gatherings will remain prohibited until <b>31 July</b>, except for <u>funerals and civil weddings</u>, which will be allowed for a <u>maximum of 20 people</u> and provided that an interpersonal distance of <u>2 metres</u> is respected. The prohibitions laid down in Article 2 of the amended Grand Ducal Regulation of 18 March introducing a series of measures in the context of the fight against COVID-19 will be maintained.
-
-</p>
-                <p>The confinement measures currently in place for vulnerable persons and persons over 65 years of age will continue to be in force at least<b> until the end of the first phase</b>. The gradual lifting of the current restrictions also entails the need to develop, in consultation with the Ministry of Family Affairs, Integration and the Greater Region a strategy for the protection of vulnerable persons in care centres and persons over 65 years of age. 
-
-</p>
-                <p>Workers belonging to the vulnerable category may consult their doctor to determine whether the severity of the illness prevents them from going to work. This assessment must be done on a case-by-case basis, taking into account the recommendations of the Health Directorate and the working environment of the person concerned.
-
-</p>
-           </div>
+               <div id="0"></div>
+               <div id="1"></div>
+               <div id="2"></div> 
            <br>
            <p>For more information go to <a href="https://gouvernement.lu/en/actualites/toutes_actualites/communiques/2020/04-avril/20-strategie-sortie.html">gouvernement.lu</a></p> 
         </div>
+
+
+        <script type="text/javascript">
+            function getRestr() {
+                const corsProxy = "https://cors-anywhere.herokuapp.com/";
+                const url = corsProxy + "https://granddukeofco.de/hackthecrisis/data.json";
+                var req = new XMLHttpRequest();
+                req.open("GET", url, true);
+                req.setRequestHeader("X-Requested-With", "*");
+                req.onload = function() {
+                    var d = JSON.parse(this.responseText);
+                    for (var i = 0; i<d.length;i++){
+                        //vr linbreak = document.createElement('br');
+                        var name = d[i]["name"];
+                        var opens = d[i]["opens"];
+                        var date = d[i]["date"];
+                        g = document.getElementById(i);
+                        g.innerHTML =  name;
+                        g.innerHTML += " (" + date + ") ";
+                        g.innerHTML += "Opens: ";
+                        g.innerHTML += d[i]["opens"][0];
+                        for (var j = 1; j < d[i]["opens"].length; j++){
+                             g.innerHTML += ", "+d[i]["opens"][j];
+                        }
+                        
+                    }
+
+
+                }
+                req.send();
+            }
+
+
+            getRestr();
+        </script>
     </body>
 </html>
