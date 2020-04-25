@@ -159,8 +159,8 @@
                         header.innerHTML = "Statistics" + (window.innerWidth < 800? "<br>" : " | ") + d.toLocaleDateString("fr-LU").substring(0, 5);
                         header.style.width = "100%";
                         rs.appendChild(header);
-                        var content = [["Tested positive", "Nombre de personnes testées COVID+ par jour"],
-                                       ["Hospitalized", "Total patients COVID ayant quitté l'hôpital"],
+                        var content = [["Tested positive", "Nombre cumulé de personnes testées COVID+ "],
+                                       ["Hospitalized", "Nombre de personnes en soin normaux"],
                                        ["ICU", "Nombre de personnes en soin intensifs (patients du grand est inclus)"],
                                        ["Deceased", "Nombre de décès - cumulé (sans patients du grand est)"]];
                         var colors = ["red", "yellow", "green"];
@@ -170,7 +170,7 @@
                         }
                         for (var i = 0; i < upto; i++) {
                             var status = dt[dt.length - 1][content[i][1]] - dt[dt.length - 2][content[i][1]];
-                            status = Math.min(Math.max(status, -1), 1);
+                            status = Math.min(Math.max(status, -1), 1) * -1;
                         
                             var cont = document.createElement("div");
                             var title = document.createElement("p");
