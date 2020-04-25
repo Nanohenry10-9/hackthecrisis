@@ -51,7 +51,7 @@
             .nav-btn-wrapper {
                 width: 48%;
                 margin-bottom: 2%;
-                height: 180px;
+                height: 200px;
             }
             
             .nav-btn:hover {
@@ -83,6 +83,15 @@
             .span-2 {
                 width: 98%;
             }
+            
+            #lastUpdate {
+                display: none;
+                background-color: darkorange;
+                color: #FFF;
+                padding: 5px;
+                border-radius: 5px;
+                font-size: 16px;
+            }
         </style>
     </head>
     <body>
@@ -96,6 +105,7 @@
                     <div class="nav-btn-text">
                         <h1>Restrictions</h1>
                     </div>
+                    <div id="lastUpdate"></div>
                 </div>
             </a>
             <a href="news.html" class="nav-btn-wrapper">
@@ -148,62 +158,89 @@
                 return "rgb(" + (r1 * x + r2 * (1 - x)) + "," + (g1 * x + g2 * (1 - x)) + "," + (b1 * x + b2 * (1 - x)) + ")";
             }*/
         
-            const corsProxy = "https://cors-anywhere.herokuapp.com/";
-            const url = corsProxy + "https://data.public.lu/fr/datasets/r/bad0c25e-2397-4739-9916-1f9d60625f03";
-            var req = new XMLHttpRequest();
-            req.open("GET", url, true);
-            req.setRequestHeader("X-Requested-With", "*");
-            req.responseType = "arraybuffer";
-            req.onload = function() {
-                var data = new Uint8Array(req.response);
-                var wb = XLSX.read(data, {type: "array"});
-                var dt = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-                fade(document.getElementById("placeholder-stats"), "out");
-                setTimeout(function() {
-                    var rs = document.createElement("div");
-                    rs.setAttribute("id", "real-stats");
-                    rs.style.display = "none";
-                    document.getElementById("option-3").appendChild(rs);
-                    
-                    document.getElementById("option-3").style.paddingTop = "0";
-                    var header = document.createElement("h3");
-                    var d = new Date(new Date(1899, 11, 30).getTime() + parseFloat(dt[dt.length - 1]["Date"]) * 1000 * 60 * 60 * 24);
-                    header.innerHTML = "Statistics | " + d.toLocaleDateString("fr-LU").substring(0, 5);
-                    header.style.width = "100%";
-                    rs.appendChild(header);
-                    var content = [["Tested positive", "Nombre de personnes testées COVID+ par jour"],
-                                   ["Hospitalized", "Total patients COVID ayant quitté l'hôpital"],
-                                   ["ICU", "Nombre de personnes en soin intensifs (patients du grand est inclus)"],
-                                   ["Deceased", "Nombre de décès - cumulé (sans patients du grand est)"]];
-                    var colors = ["red", "yellow", "green"];
-                    for (var i = 0; i < content.length; i++) {
-                        var status = dt[dt.length - 1][content[i][1]] - dt[dt.length - 2][content[i][1]];
-                        status = Math.min(Math.max(status, -1), 1);
-                    
-                        var cont = document.createElement("div");
-                        var title = document.createElement("p");
-                        title.innerHTML = content[i][0];
-                        cont.appendChild(title);
-                        cont.style.float = "left";
-                        var arrow = document.createElement("i");
-                        arrow.classList.add("material-icons");
-                        arrow.innerHTML = "arrow_forward";
-                        arrow.style.fontSize = "32px";
-                        arrow.style.transform = "rotate(" + status * 45 + "deg)";
-                        arrow.style.color = colors[status + 1];
-                        cont.appendChild(arrow);
-                        rs.appendChild(cont);
-                    }
-                    
-                    rs.style.display = "flex";
-                    rs.style.flexDirection = "row";
-                    rs.style.flexWrap = "wrap";
-                    rs.style.justifyContent = "space-around";
-                    document.getElementById("placeholder-stats").style.display = "none";
-                    fade(rs, "in");
-                }, 200);
+            function updateStatistics() {
+                const corsProxy = "https://cors-anywhere.herokuapp.com/";
+                const url = corsProxy + "https://data.public.lu/fr/datasets/r/bad0c25e-2397-4739-9916-1f9d60625f03";
+                var req = new XMLHttpRequest();
+                req.open("GET", url, true);
+                req.setRequestHeader("X-Requested-With", "*");
+                req.responseType = "arraybuffer";
+                req.onload = function() {
+                    var data = new Uint8Array(req.response);
+                    var wb = XLSX.read(data, {type: "array"});
+                    var dt = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                    fade(document.getElementById("placeholder-stats"), "out");
+                    setTimeout(function() {
+                        var rs = document.createElement("div");
+                        rs.setAttribute("id", "real-stats");
+                        rs.style.display = "none";
+                        document.getElementById("option-3").appendChild(rs);
+                        
+                        document.getElementById("option-3").style.paddingTop = "0";
+                        var header = document.createElement("h3");
+                        var d = new Date(new Date(1899, 11, 30).getTime() + parseFloat(dt[dt.length - 1]["Date"]) * 1000 * 60 * 60 * 24);
+                        header.innerHTML = "Statistics | " + d.toLocaleDateString("fr-LU").substring(0, 5);
+                        header.style.width = "100%";
+                        rs.appendChild(header);
+                        var content = [["Tested positive", "Nombre de personnes testées COVID+ par jour"],
+                                       ["Hospitalized", "Total patients COVID ayant quitté l'hôpital"],
+                                       ["ICU", "Nombre de personnes en soin intensifs (patients du grand est inclus)"],
+                                       ["Deceased", "Nombre de décès - cumulé (sans patients du grand est)"]];
+                        var colors = ["red", "yellow", "green"];
+                        for (var i = 0; i < content.length; i++) {
+                            var status = dt[dt.length - 1][content[i][1]] - dt[dt.length - 2][content[i][1]];
+                            status = Math.min(Math.max(status, -1), 1);
+                        
+                            var cont = document.createElement("div");
+                            var title = document.createElement("p");
+                            title.innerHTML = content[i][0];
+                            cont.appendChild(title);
+                            cont.style.float = "left";
+                            var arrow = document.createElement("i");
+                            arrow.classList.add("material-icons");
+                            arrow.innerHTML = "arrow_forward";
+                            arrow.style.fontSize = "32px";
+                            arrow.style.transform = "rotate(" + status * 45 + "deg)";
+                            arrow.style.color = colors[status + 1];
+                            cont.appendChild(arrow);
+                            rs.appendChild(cont);
+                        }
+                        
+                        rs.style.display = "flex";
+                        rs.style.flexDirection = "row";
+                        rs.style.flexWrap = "wrap";
+                        rs.style.justifyContent = "space-around";
+                        document.getElementById("placeholder-stats").style.display = "none";
+                        fade(rs, "in");
+                    }, 200);
+                }
+                req.send();
             }
-            req.send();
+            
+            function updateRestrictions() {
+                const corsProxy = "https://cors-anywhere.herokuapp.com/";
+                const url = corsProxy + "https://granddukeofco.de/hackthecrisis/data.json";
+                var req = new XMLHttpRequest();
+                req.open("GET", url, true);
+                req.setRequestHeader("X-Requested-With", "*");
+                req.onload = function() {
+                    var d = JSON.parse(this.responseText);
+                    var l = 0;
+                    for (var i = 0; i < d.length; i++) {
+                        var p = d[i]["lastUpdate"].split("/");
+                        p = new Date(p[2], p[1] - 1, p[0]);
+                        l = Math.max(p.getTime(), l);
+                    }
+                    var lu = document.getElementById("lastUpdate");
+                    lu.innerHTML = "Last updated " + new Date(l).toLocaleDateString("fr-LU");
+                    lu.style.display = "inline-block";
+                    fade(lu, "in");
+                }
+                req.send();
+            }
+            
+            updateStatistics();
+            updateRestrictions();
         </script>
     </body>
 </html>
