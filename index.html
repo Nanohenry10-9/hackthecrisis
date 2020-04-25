@@ -189,7 +189,11 @@
                                        ["ICU", "Nombre de personnes en soin intensifs (patients du grand est inclus)"],
                                        ["Deceased", "Nombre de décès - cumulé (sans patients du grand est)"]];
                         var colors = ["red", "yellow", "green"];
-                        for (var i = 0; i < content.length; i++) {
+                        var upto = content.length;
+                        if (window.innerWidth < 800) {
+                            upto = 1;
+                        }
+                        for (var i = 0; i < upto; i++) {
                             var status = dt[dt.length - 1][content[i][1]] - dt[dt.length - 2][content[i][1]];
                             status = Math.min(Math.max(status, -1), 1);
                         
