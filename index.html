@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="utf-8">
@@ -32,14 +33,6 @@
                 display: inline;
             }
             
-            #option-list {
-                list-style-type: none;
-                columns: 2;
-                padding: 4%;
-                margin: 0;
-                height: 100%;
-            }
-            
             .nav-btn {
                 background-color: #234;
                 text-align: center;
@@ -47,24 +40,24 @@
                 padding-bottom: 20px;
                 box-sizing: border-box;
                 width: 100%;
+                height: 100%;
                 color: #FFF;
                 border-radius: 5px;
                 margin-top: 8%;
                 display: inline-block;
-                height: 100%;
                 box-shadow: 0 0 7px #0009;
                 transition-duration: 0.2s;
+            }
+            
+            .nav-btn-wrapper {
+                width: 48%;
+                margin-bottom: 2%;
+                height: 180px;
             }
             
             .nav-btn:hover {
                 transform: scale(1.02);
                 transition-duration: 0.2s;
-            }
-            
-            .option-li {
-                height: 100%;
-                padding: 0;
-                margin: 0;
             }
             
             .nav-btn-text {
@@ -74,55 +67,148 @@
             .nav-btn-icon {
                 font-size: 74px;
             }
+            
+            #content {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                width: 100%;
+                height: 100%;
+                padding: 20px;
+                margin: 0;
+                margin-bottom: 50px;
+                box-sizing: border-box;
+            }
         </style>
     </head>
     <body>
         <div id="navbar">
             <h1 class="navbar-text">[App name]</h1>
         </div>
-        <div>
-            <ul id="option-list">
-                <li class="option-li">
-                    <a href="restrs.html">
-                        <div id="option-1" class="nav-btn">
-                            <i class="material-icons nav-btn-icon">warning</i>
-                            <div class="nav-btn-text">
-                                <h1>Restrictions</h1>
-                            </div>
+        <div id="content">
+            <a href="restrs.html" class="nav-btn-wrapper">
+                <div id="option-1" class="nav-btn">
+                    <i class="material-icons nav-btn-icon">warning</i>
+                    <div class="nav-btn-text">
+                        <h1>Restrictions</h1>
+                    </div>
+                </div>
+            </a>
+            <a href="instrs.html" class="nav-btn-wrapper">
+                <div id="option-2" class="nav-btn">
+                    <i class="material-icons nav-btn-icon">question_answer</i>
+                    <div class="nav-btn-text">
+                        <h1>Instructions</h1>
+                    </div>
+                </div>
+            </a>
+            <a href="stats.html" class="nav-btn-wrapper">
+                <div id="option-3" class="nav-btn">
+                    <div id="placeholder-stats">
+                        <i class="material-icons nav-btn-icon">show_chart</i>
+                        <div class="nav-btn-text">
+                            <h1>Statistics</h1>
                         </div>
-                    </a>
-                </li>
-                <li class="option-li">
-                    <a href="instrs.html">
-                        <div id="option-2" class="nav-btn">
-                            <i class="material-icons nav-btn-icon">question_answer</i>
-                            <div class="nav-btn-text">
-                                <h1>Instructions</h1>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li class="option-li">
-                    <a href="stats.html">
-                        <div id="option-3" class="nav-btn">
-                            <i class="material-icons nav-btn-icon">show_chart</i>
-                            <div class="nav-btn-text">
-                                <h1>Statistics</h1>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li class="option-li">
-                    <a href="info.html">
-                        <div id="option-4" class="nav-btn">
-                            <i class="material-icons nav-btn-icon">info_outline</i>
-                            <div class="nav-btn-text">
-                                <h1>Known facts</h1>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+                    </div>
+                </div>
+            </a>
+            <a href="info.html" class="nav-btn-wrapper">
+                <div id="option-4" class="nav-btn">
+                    <i class="material-icons nav-btn-icon">info_outline</i>
+                    <div class="nav-btn-text">
+                        <h1>Known facts</h1>
+                    </div>
+                </div>
+            </a>
+            <a href="info.html" class="nav-btn-wrapper span-2">
+                <div id="option-5" class="nav-btn">
+                    <i class="material-icons nav-btn-icon">error</i>
+                    <div class="nav-btn-text">
+                        <h1>News</h1>
+                    </div>
+                </div>
+            </a>
         </div>
+        
+        <script>
+            function fade(elem, dir) {
+                if (dir != "in" && dir != "out") {
+                    return;
+                }
+                elem.style.opacity = (dir == "in")? 0.0 : 1.0;
+                var intr = setInterval(function() {
+                    elem.style.opacity = parseFloat(elem.style.opacity) + ((dir == "in")? 0.1 : -0.1);
+                    if (dir == "in" && elem.style.opacity >= 1.0) {
+                        elem.style.opacity = 1.0;
+                        clearInterval(intr);
+                    } else if (dir != "in" && elem.style.opacity <= 0.0) {
+                        elem.style.opacity = 0.0;
+                        clearInterval(intr);
+                    }
+                }, 20);
+            }
+            
+            /*function lerp(r1, g1, b1, r2, g2, b2, x) {
+                return "rgb(" + (r1 * x + r2 * (1 - x)) + "," + (g1 * x + g2 * (1 - x)) + "," + (b1 * x + b2 * (1 - x)) + ")";
+            }*/
+        
+            const corsProxy = "https://cors-anywhere.herokuapp.com/";
+            const url = corsProxy + "https://data.public.lu/fr/datasets/r/bad0c25e-2397-4739-9916-1f9d60625f03";
+            var req = new XMLHttpRequest();
+            req.open("GET", url, true);
+            req.setRequestHeader("X-Requested-With", "*");
+            req.responseType = "arraybuffer";
+            req.onload = function() {
+                var data = new Uint8Array(req.response);
+                var wb = XLSX.read(data, {type: "array"});
+                var dt = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                fade(document.getElementById("placeholder-stats"), "out");
+                setTimeout(function() {
+                    var rs = document.createElement("div");
+                    rs.setAttribute("id", "real-stats");
+                    rs.style.display = "none";
+                    document.getElementById("option-3").appendChild(rs);
+                    
+                    document.getElementById("option-3").style.paddingTop = "0";
+                    var header = document.createElement("h3");
+                    var d = new Date(new Date(1899, 11, 30).getTime() + parseFloat(dt[dt.length - 1]["Date"]) * 1000 * 60 * 60 * 24);
+                    header.innerHTML = "Statistics | " + d.toLocaleDateString("fr-LU").substring(0, 5);
+                    header.style.width = "100%";
+                    rs.appendChild(header);
+                    var content = [["Positive", "Nombre de personnes testées COVID+ par jour"],
+                                   ["ICU", "Nombre de personnes en soin intensifs (patients du grand est inclus)"],
+                                   ["Hospitalized", "Total patients COVID ayant quitté l'hôpital"],
+                                   ["Deceased", "Nombre de décès - cumulé (sans patients du grand est)"]];
+                    var colors = ["red", "yellow", "green"];
+                    for (var i = 0; i < content.length; i++) {
+                        var status = dt[dt.length - 1][content[i][1]] - dt[dt.length - 2][content[i][1]];
+                        status = Math.min(Math.max(status, -1), 1);
+                    
+                        var cont = document.createElement("div");
+                        var title = document.createElement("p");
+                        title.innerHTML = content[i][0];
+                        cont.appendChild(title);
+                        cont.style.float = "left";
+                        var arrow = document.createElement("i");
+                        arrow.classList.add("material-icons");
+                        arrow.innerHTML = "arrow_forward";
+                        arrow.style.fontSize = "32px";
+                        arrow.style.transform = "rotate(" + status * 45 + "deg)";
+                        arrow.style.color = colors[status + 1];
+                        cont.appendChild(arrow);
+                        rs.appendChild(cont);
+                    }
+                    
+                    rs.style.display = "flex";
+                    rs.style.flexDirection = "row";
+                    rs.style.flexWrap = "wrap";
+                    rs.style.justifyContent = "space-around";
+                    document.getElementById("placeholder-stats").style.display = "none";
+                    fade(rs, "in");
+                }, 200);
+            }
+            req.send();
+        </script>
     </body>
 </html>
