@@ -181,7 +181,7 @@
                         document.getElementById("option-3").style.paddingTop = "0";
                         var header = document.createElement("h3");
                         var d = new Date(new Date(1899, 11, 30).getTime() + parseFloat(dt[dt.length - 1]["Date"]) * 1000 * 60 * 60 * 24);
-                        header.innerHTML = "Statistics | " + d.toLocaleDateString("fr-LU").substring(0, 5);
+                        header.innerHTML = "Statistics" + (window.innerWidth < 800? "<br>" : " | ") + d.toLocaleDateString("fr-LU").substring(0, 5);
                         header.style.width = "100%";
                         rs.appendChild(header);
                         var content = [["Tested positive", "Nombre de personnes testées COVID+ par jour"],
