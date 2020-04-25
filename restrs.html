@@ -26,7 +26,21 @@
             </a>
         </div>
         <div id="content">
-                15.04.2020
+            <div id="openingDates">
+                <h2>In brief:</h2>
+                <p class="load-text">Loading...</p>
+                <ul id="openingDates-list"></ul>
+            </div>
+            <div id="info">
+                <h2>Please note:</h2>
+                <p class="load-text">Loading...</p>
+                <ul id="info-list"></ul>
+            </div>
+            
+            <br><hr>
+            <h2>Original document:</h2>
+            
+            15.04.2020
             <div id="disclaimer">
                 <p>It is important to note that any resumption of activities will be accompanied by very strict barrier gestures and complemented by the <b>mandatory wearing of a mask </b> or any other device that covers the nose and mouth for interpersonal contact situations if the safety distance of <b>2 metres cannot be guaranteed.</b>
 
@@ -73,7 +87,48 @@
 </p>
            </div>
            <br>
-           <p>For more information go to <a href="https://gouvernement.lu/en/actualites/toutes_actualites/communiques/2020/04-avril/20-strategie-sortie.html">gouvernement.lu</a></p> 
+           <p>For more information go to <a href="https://gouvernement.lu/en/actualites/toutes_actualites/communiques/2020/04-avril/20-strategie-sortie.html">gouvernement.lu</a></p>
         </div>
+        
+        <script>
+            function nJoin(arr) {
+                var res = "";
+                for (var i = 0; i < arr.length; i++) {
+                    res += arr[i];
+                    if (i != arr.length - 1) {
+                        if (i == arr.length - 2) {
+                            res += " and ";
+                        } else {
+                            res += ", ";
+                        }
+                    }
+                }
+                return res;
+            }
+        
+            const corsProxy = "https://cors-anywhere.herokuapp.com/";
+            const url = corsProxy + "https://granddukeofco.de/hackthecrisis/data.json";
+            var req = new XMLHttpRequest();
+            req.open("GET", url, true);
+            req.setRequestHeader("X-Requested-With", "*");
+            req.onload = function() {
+                var d = JSON.parse(this.responseText);
+                for (var i = 0; i < d["openingDates"].length; i++) {
+                    var e = document.createElement("li");
+                    e.innerHTML = "From " + d["openingDates"][i]["date"] + " onwards, " + nJoin(d["openingDates"][i]["opens"]) + " will be opened/allowed.";
+                    document.getElementById("openingDates-list").appendChild(e);
+                }
+                for (var i = 0; i < d["info"].length; i++) {
+                    var e = document.createElement("li");
+                    e.innerHTML = d["info"][i];
+                    document.getElementById("info-list").appendChild(e);
+                }
+                var l = document.getElementsByClassName("load-text");
+                for (var i = 0; i < l.length; i++) {
+                    l[i].style.display = "none";
+                }
+            }
+            req.send();
+        </script>
     </body>
 </html>

@@ -206,14 +206,8 @@
                 req.setRequestHeader("X-Requested-With", "*");
                 req.onload = function() {
                     var d = JSON.parse(this.responseText);
-                    var l = 0;
-                    for (var i = 0; i < d.length; i++) {
-                        var p = d[i]["lastUpdate"].split("/");
-                        p = new Date(p[2], p[1] - 1, p[0]);
-                        l = Math.max(p.getTime(), l);
-                    }
                     var lu = document.getElementById("lastUpdate");
-                    lu.innerHTML = "Last updated " + new Date(l).toLocaleDateString("fr-LU");
+                    lu.innerHTML = "Last updated " + lu["lastUpdated"];
                     lu.style.display = "inline-block";
                     fade(lu, "in");
                 }
