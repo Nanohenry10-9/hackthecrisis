@@ -27,12 +27,12 @@
         </div>
         <div id="content">
             <div id="openingDates">
-                <h2>In brief:</h2>
+                <h2>Tentative dates:</h2>
                 <p class="load-text">Loading...</p>
                 <ul id="openingDates-list"></ul>
             </div>
             <div id="info">
-                <h2>Please note:</h2>
+                <h2>Important information:</h2>
                 <p class="load-text">Loading...</p>
                 <ul id="info-list"></ul>
             </div>
@@ -91,10 +91,10 @@
         </div>
         
         <script>
-            function nJoin(arr) {
+            function bJoin(arr) {
                 var res = "";
                 for (var i = 0; i < arr.length; i++) {
-                    res += arr[i];
+                    res += "<b>" + arr[i] + "</b>";
                     if (i != arr.length - 1) {
                         if (i == arr.length - 2) {
                             res += " and ";
@@ -115,7 +115,7 @@
                 var d = JSON.parse(this.responseText);
                 for (var i = 0; i < d["openingDates"].length; i++) {
                     var e = document.createElement("li");
-                    e.innerHTML = "From " + d["openingDates"][i]["date"] + " onwards, " + nJoin(d["openingDates"][i]["opens"]) + " will be opened/allowed.";
+                    e.innerHTML = "From <b>" + d["openingDates"][i]["date"] + "</b> onwards, " + bJoin(d["openingDates"][i]["opens"]) + " will be opened/allowed.";
                     document.getElementById("openingDates-list").appendChild(e);
                 }
                 for (var i = 0; i < d["info"].length; i++) {
