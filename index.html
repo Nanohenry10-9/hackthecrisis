@@ -207,7 +207,7 @@
                 req.onload = function() {
                     var d = JSON.parse(this.responseText);
                     var lu = document.getElementById("lastUpdate");
-                    lu.innerHTML = "Last updated " + lu["lastUpdated"];
+                    lu.innerHTML = "Last updated " + d["lastUpdate"];
                     lu.style.display = "inline-block";
                     fade(lu, "in");
                 }
