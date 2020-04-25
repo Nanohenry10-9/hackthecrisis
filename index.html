@@ -143,6 +143,14 @@
                 req.setRequestHeader("X-Requested-With", "*");
                 req.responseType = "arraybuffer";
                 req.onload = function() {
+                    var mobile;
+                    if (window.innerWidth < 800){
+                		mobile = true;
+                	}
+                	else {
+                		mobile = false;
+                	}
+                    if (mobile == false){
                     var data = new Uint8Array(req.response);
                     var wb = XLSX.read(data, {type: "array"});
                     var dt = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
@@ -193,6 +201,7 @@
                         rs.style.justifyContent = "space-around";
                         document.getElementById("placeholder-stats").style.display = "none";
                         fade(rs, "in");
+                    }
                     }, 200);
                 }
                 req.send();
