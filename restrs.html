@@ -32,7 +32,7 @@
                <div id="1"></div>
                <div id="2"></div> 
            <br>
-           <p>For more information go to <a href="https://gouvernement.lu/en/actualites/toutes_actualites/communiques/2020/04-avril/20-strategie-sortie.html">gouvernement.lu</a></p> 
+           <div id="info"></div>
         </div>
 
 
@@ -45,21 +45,35 @@
                 req.setRequestHeader("X-Requested-With", "*");
                 req.onload = function() {
                     var d = JSON.parse(this.responseText);
-                    for (var i = 0; i<d.length;i++){
+
+                    info = document.getElementById('info');
+                    info.InnerHTML = "Info: "
+                    for (var i = 0; i < d["info"].length; i++){
+                        var mybr = document.createElement('br');
+                        info.appendChild(mybr);
+                        info.innerHTML += d["info"][i];
+
+                    }
+
+
+
+                    for (var i = 0; i<d["openingDates"].length;i++){
                         //vr linbreak = document.createElement('br');
-                        var name = d[i]["name"];
-                        var opens = d[i]["opens"];
-                        var date = d[i]["date"];
+                        var name = d["openingDates"][i]["name"];
+                        var opens = d["openingDates"][i]["opens"];
+                        var date = d["openingDates"][i]["date"];
                         g = document.getElementById(i);
-                        g.innerHTML =  name;
+                       
                         g.innerHTML += " (" + date + ") ";
-                        g.innerHTML += "Opens: ";
-                        g.innerHTML += d[i]["opens"][0];
-                        for (var j = 1; j < d[i]["opens"].length; j++){
-                             g.innerHTML += ", "+d[i]["opens"][j];
+                        g.innerHTML += "Opening: ";
+                        g.innerHTML += d["openingDates"][i]["opens"][0];
+                        for (var j = 1; j < d["openingDates"][i]["opens"].length; j++){
+                             g.innerHTML += ", "+d["openingDates"][i]["opens"][j];
                         }
                         
                     }
+                    
+
 
 
                 }
