@@ -23,10 +23,6 @@
         </style>
     </head>
     
-    <!--
-        https://download.data.public.lu/resources/donnees-covid19/20200423-171310/datapublic-covid19.xlsx (?)
-    -->
-    
     <body>
         <div id="navbar">
             <a href="index.html" id="index">
@@ -39,7 +35,7 @@
         </div>
         <script>
             const corsProxy = "https://cors-anywhere.herokuapp.com/";
-            const url = corsProxy + "https://data.public.lu/fr/datasets/r/bdcdc4dd-2922-415e-a075-d0367588f1d8";
+            const url = corsProxy + "https://download.data.public.lu/resources/donnees-covid19/20200605-171539/datapublic-covid19.xlsx";
             var req = new XMLHttpRequest();
             req.open("GET", url, true);
             req.setRequestHeader("X-Requested-With", "*");
